@@ -1,138 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-
-namespace ConverterApp.Models
+using ConverterApp.Models;
+namespace ConverterApp
 {
-    public class Converter
+    class Converter
     {
-
-
-               
-        public static string StringToBinary2(string data)
+        static void Main(string[] args)
         {
-            string converted = string.Empty;
-            // convert string to byte array
-            byte[] bytes = Encoding.ASCII.GetBytes(data);
+            var fullName = Console.ReadLine();
+            //string text = "Tomasz Szumski";
+            string binaryValue2 = Models.Converter.StringToBinary2(fullName);
+            Console.WriteLine($"Text: {fullName}\nBinary: {binaryValue2}");
 
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    converted += (bytes[i] & 0x80) > 0 ? "1" : "0";
-                    bytes[i] <<= 1;
-                }
-            }
+            //result of binary conversion "0101010001101111011011010110000101110011011110100010000001010011011110100111010101101101011100110110101101101001";
+                                         
+            var ascii = Console.ReadLine();
+            string textFromBinary = Models.Converter.BinaryToString(ascii);
+            Console.WriteLine($"Binary: {ascii}\nText: {textFromBinary}");
 
-            return converted;
+            //string text = "Tomasz Szumski";
+            var text = Console.ReadLine();
+
+            string Hexvalue= Models.Converter.StringToHex2(text);
+
+            //Output the Hexadecimal conversion
+            Console.WriteLine(Hexvalue);
+
+            //result of hex conversion "546F6D61737A20537A756D736B69";
+            var hexadecimalValue = Console.ReadLine();
+            string textFromHex = Models.Converter.HexToString(hexadecimalValue);
+
+            Console.WriteLine($"HEX: {hexadecimalValue}\nText: {textFromHex}");
+
+            //ascii text
+            var name = Console.ReadLine();
+
+            //Output the Base64 encoded string
+            string nameBase64Encoded = Models.Converter.StringToBase64(name);
+            Console.WriteLine(nameBase64Encoded);
+            Console.ReadKey();
+
+            //Output the decoded Base64 string
+            string nameBase64Decoded = Models.Converter.Base64ToString(nameBase64Encoded);
+            Console.WriteLine(nameBase64Decoded);
+
+            Console.ReadKey();
+
+
+
+           
+
+           
+
         }
-
-
-        public static string StringToBinary(string text)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char c in text.ToCharArray())
-            {
-                //Convert the char to base 2 and pad the output with 0
-                sb.Append(Convert.ToString(c, 2).PadLeft(8, '0'));
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Convert a Binary text string to a Text string
-        /// </summary>
-        /// <param name="text">Binary encoded string</param>
-        /// <returns>Text string</returns>
-        public static string BinaryToString(string text)
-        {
-            List<byte> bytes = new List<byte>();
-
-            for (int i = 0; i < text.Length; i += 8)
-            {
-                bytes.Add(Convert.ToByte(text.Substring(i, 8), 2));
-            }
-            return Encoding.ASCII.GetString(bytes.ToArray());
-        }
-
-        /// <summary>
-        /// An approach to ASCII to Hexadecimal conversion using ToString("X2")
-        /// </summary>
-        /// <param name="data">String to convert</param>
-        /// <returns></returns>
-        public static string StringToHex2(string data)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            byte[] bytearray = Encoding.ASCII.GetBytes(data);
-
-            foreach (byte bytepart in bytearray)
-            {
-                sb.Append(bytepart.ToString("X2"));
-            }
-
-            return sb.ToString().ToUpper();
-        }
-
-        /// <summary>
-        /// Converts a Hexadecimal string to ASCII string
-        /// </summary>
-        /// <param name="hexString">Hexadecimal string</param>
-        /// <returns>ASCII string</returns>
-        public static string HexToString(string hexString)
-        {
-            if (hexString == null || (hexString.Length & 1) == 1)
-            {
-                throw new ArgumentException();
-            }
-            var sb = new StringBuilder();
-            for (var i = 0; i < hexString.Length; i += 2)
-            {
-                var hexChar = hexString.Substring(i, 2);
-                sb.Append((char)Convert.ToByte(hexChar, 16));
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Encodes a String to a Base64 String
-        /// </summary>
-        /// <param name="data">String data</param>
-        /// <returns>Base64 Encoded String</returns>
-        public static string StringToBase64(string data)
-        {
-            byte[] bytearray = Encoding.ASCII.GetBytes(data);
-
-            string result = Convert.ToBase64String(bytearray);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts a Base64 string to decoded String
-        /// </summary>
-        /// <param name="base64String">Base64 encoded string</param>
-        /// <returns>Decoded String from Base64</returns>
-        public static string Base64ToString(string base64String)
-        {
-            byte[] bytearray = Convert.FromBase64String(base64String);
-
-            using (var ms = new MemoryStream(bytearray))
-            {
-                using (StreamReader reader = new StreamReader(ms))
-                {
-                    string text = reader.ReadToEnd();
-                    return text;
-                }
-            }
-        }
-
     }
-
-
-
-
-   
 }
